@@ -1,88 +1,65 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const WebpackPwaManifest = require('webpack-pwa-manifest');
-const path = require('path');
-const { InjectManifest, GenerateSW } = require('workbox-webpack-plugin');
-
-// TODO: Add and configure workbox plugins for a service worker and manifest file.
-// Add plugins to the webpack configuration. InjectManifest, HtmlWebpackPlugin, pwaManifest
-// TODO: Add CSS loaders and babel to webpack.
-// Add rules to the webpack configuration. css-loader, babel-loader, style-loader 
-// make sure to add the plugins and rules to the correct configuration object. 
-
-
-
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const WebpackPwaManifest = require("webpack-pwa-manifest");
+const path = require("path");
+const { InjectManifest } = require("workbox-webpack-plugin");
 module.exports = () => {
   return {
-    mode: 'development',
+    mode: "development",
     entry: {
-      index: './src/js/index.js',
-      install: './src/js/install.js',
-      editor: './src/js/editor.js'
-    },
-    devServer: {
-      hot: 'only',
+      main: "./src/js/index.js",
+      install: "./src/js/install.js",
     },
     output: {
-      // filename: "manifest.js",
+      filename: "[name].bundle.js",
       path: path.resolve(__dirname, "dist"),
     },
-//10 properties: 1) Name, 2) short name, 3) start_url, 4) background color, 5)theme color, 6) icons, 7) description, 8) publicPath, 9) inject, 10) fingerprints,
     plugins: [
       new HtmlWebpackPlugin({
         template: "./index.html",
-        title: "Webpack Plugin",
+        title: "J.A.T.E",
       }),
-      new MiniCssExtractPlugin(),
-      new GenerateSW(),
       new InjectManifest({
-        swSrc: './src-sw.js',
-        swDest: 'service-worker.js',
+        swSrc: "./src-sw.js",
+        swDest: "src-sw.js",
       }),
       new WebpackPwaManifest({
-    name: 'JATE text Editor',
-    short_name: 'JATE',
-    display: "standalone",
-    start_url: './', 
-    publicPath: './', 
-    description: 'text editor',
-    background_color: '#ffffff',
-    theme_color: '#ffffff',
-    fingerprints: false,
-    inject: true,
-   
-    icons: [
-      {
-        src: path.resolve('src/images/logo.png'),
-        sizes: [96, 128, 192, 256, 384, 512],
-        destination: path.join('src', 'icons'),
-      },
-    ]
-  })
-  ],
-
-    // Added babel for converting javascript to work with any browser
-    // Bundle images files
-    // Bundle css file
+        fingerprints: false,
+        inject: true,
+        name: "Just Another Text Editor",
+        short_name: "J.A.T.E",
+        description: "Takes notes with JavaScript syntax highlighting!",
+        background_color: "#225CA3",
+        theme_color: "#225CA3",
+        start_url: "/",
+        publicPath: "/",
+        icons: [
+          {
+            src: path.resolve("src/images/logo.png"),
+            sizes: [96, 128, 192, 256, 384, 512],
+            destination: path.join("assets", "icons"),
+          },
+        ],
+      }),
+    ],
     module: {
       rules: [
         {
-          test: /\.(png|svg|jpg|jpeg|gif|ico)$/i,
-          type: "asset/resource",
+          test: /\.css$/i,
+          use: ["style-loader", "css-loader"],
         },
         {
           test: /\.m?js$/,
-          exclude: /(node_modules|bower_components)/,
+          exclude: /node_modules/,
           use: {
             loader: "babel-loader",
             options: {
               presets: ["@babel/preset-env"],
+              plugins: [
+                "@babel/plugin-proposal-object-rest-spread",
+                "@babel/transform-runtime",
+              ],
             },
           },
-        },
-        {
-          test: /\.css$/i,
-          use: [MiniCssExtractPlugin.loader, "css-loader"],
         },
       ],
     },
