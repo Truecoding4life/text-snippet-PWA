@@ -1,4 +1,5 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 const path = require('path');
 const { InjectManifest } = require('workbox-webpack-plugin');
@@ -8,27 +9,77 @@ const { InjectManifest } = require('workbox-webpack-plugin');
 // TODO: Add CSS loaders and babel to webpack.
 // Add rules to the webpack configuration. css-loader, babel-loader, style-loader 
 // make sure to add the plugins and rules to the correct configuration object. 
-//10 properties: 1) Name, 2) short name, 3) start_url, 4) background color, 5)theme color, 6) icons, 7) description, 8) publicPath, 9) inject, 10) fingerprints,
+
 
 
 module.exports = () => {
   return {
     mode: 'development',
     entry: {
-      main: './src/js/index.js',
-      install: './src/js/install.js'
+      index: './src/js/index.js',
+    },
+    devServer: {
+      hot: 'only',
     },
     output: {
-      filename: '[name].bundle.js',
-      path: path.resolve(__dirname, 'dist'),
+      // filename: "manifest.js",
+      path: path.resolve(__dirname, "dist"),
     },
+//10 properties: 1) Name, 2) short name, 3) start_url, 4) background color, 5)theme color, 6) icons, 7) description, 8) publicPath, 9) inject, 10) fingerprints,
     plugins: [
-      
+      new HtmlWebpackPlugin({
+        template: "./index.html",
+        title: "Webpack Plugin",
+      }),
+      new MiniCssExtractPlugin(),
+      new InjectManifest({
+        swSrc: './src-sw.js',
+        swDest: 'service-worker.js',
+      }),
+      new WebpackPwaManifest({
+    name: 'JATE text Editor',
+    short_name: 'JATE',
+    start_url: './',
+    description: 'text editor',
+    background_color: '#ffffff',
+    theme_color: '#ffffff',
+    fingerprints: false,
+    publicPath: './', 
+    inject: true,
+   
+    icons: [
+      {
+        src: path.resolve('src/images/logo.png'),
+        sizes: [96, 128, 192, 256, 384, 512],
+        destination: path.join('src', 'icons'),
+      },
+    ]
+  })
     ],
 
+    // Added babel for converting javascript to work with any browser
+    // Bundle images files
+    // Bundle css file
     module: {
       rules: [
-        
+        {
+          test: /\.(png|svg|jpg|jpeg|gif)$/i,
+          type: "asset/resource",
+        },
+        {
+          test: /\.m?js$/,
+          exclude: /(node_modules|bower_components)/,
+          use: {
+            loader: "babel-loader",
+            options: {
+              presets: ["@babel/preset-env"],
+            },
+          },
+        },
+        {
+          test: /\.css$/i,
+          use: [MiniCssExtractPlugin.loader, "css-loader"],
+        },
       ],
     },
   };

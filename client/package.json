@@ -1,12 +1,12 @@
 {
-  "name": "JATE",
+  "name": "text-snippet-client",
   "scripts": {
-    "dev": "webpack-dev-server",
+    "server": "webpack-dev-server",
     "build": "webpack --mode production",
     "start": "webpack --watchAll"
   },
   "author": "2U",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.15.0",
     "@babel/plugin-proposal-object-rest-spread": "^7.20.7",
@@ -17,6 +17,9 @@
     "css-loader": "^6.2.0",
     "html-webpack-plugin": "^5.3.2",
     "http-server": "^0.11.1",
+    "install": "^0.13.0",
+    "mini-css-extract-plugin": "^2.7.6",
+    "npm": "^10.2.4",
     "style-loader": "^3.2.1",
     "webpack": "^5.51.1",
     "webpack-cli": "^4.8.0",
