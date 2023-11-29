@@ -22,15 +22,8 @@ const initdb = async () => {
 //await the request
 export const putDb = async (content) => console.error('putDb not implemented');
 
-// TODO: Add logic for a method that gets all the content from the database
-//create an openDB - Database name, version.
-//create a transaction - database name, readonly,
-//create a store - store name,
-//get the store NOTE: WE DO NOT NEED TO GET ALL ONLY ONE - 1, 
-// await the request 
-//return the result
 
-
+// Get content from indexDB
 export const getAllDb = async () => {
   console.log('GET all from the database');
   const jadeDb = await openDB('jade', 1);
@@ -42,6 +35,17 @@ export const getAllDb = async () => {
   return result;
 };
 
+// TODO: Add logic for a method that gets all the content from the database
+//create an openDB - Database name, version.
+//create a transaction - database name, readonly,
+//create a store - store name,
+//get the store NOTE: WE DO NOT NEED TO GET ALL ONLY ONE - 1, 
+// await the request 
+//return the result
+
+
+
 export const getDb = async () => console.error('getDb not implemented');
 
 initdb();
+
