@@ -21,7 +21,14 @@ const initdb = async () => {
 //put the store - content: {id, info }
 //await the request
 export const putDb = async (content) => {
-  
+    console.log('PUT to the database');
+    const todosDb = await openDB('jate', 1);
+    const tx = todosDb.transaction('jate', 'readwrite');
+    const store = tx.objectStore('jate');
+    const request = store.put({ id: 1, jate: content });
+    const result = await request;
+    console.log('Data saved to the database', result);
+
 }
 
 // Get content from indexDB
@@ -36,11 +43,11 @@ export const putDb = async (content) => {
 
 export const getDb = async () => {
   console.log("GET all from the database");
-  const jadeDb = await openDB("jade", 1);
-  const tx = jadeDb.transaction("jade", "readonly");
-  const store = tx.objectStore("jade");
-  const request = store.getAll();
-  const result = await request;
+  const jadeDb = await openDB("jate", 1);
+  const tx = jadeDb.transaction("jate", "readonly");
+  const store = tx.objectStore("jate");
+  const request = store.get()
+    const result = await request;
   console.log("result.value", result);
   return result;
 };
