@@ -2,7 +2,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 const path = require('path');
-const { InjectManifest } = require('workbox-webpack-plugin');
+const { InjectManifest, GenerateSW } = require('workbox-webpack-plugin');
 
 // TODO: Add and configure workbox plugins for a service worker and manifest file.
 // Add plugins to the webpack configuration. InjectManifest, HtmlWebpackPlugin, pwaManifest
@@ -17,6 +17,8 @@ module.exports = () => {
     mode: 'development',
     entry: {
       index: './src/js/index.js',
+      install: './src/js/install.js',
+      editor: './src/js/editor.js'
     },
     devServer: {
       hot: 'only',
@@ -32,6 +34,7 @@ module.exports = () => {
         title: "Webpack Plugin",
       }),
       new MiniCssExtractPlugin(),
+      new GenerateSW(),
       new InjectManifest({
         swSrc: './src-sw.js',
         swDest: 'service-worker.js',
@@ -39,12 +42,13 @@ module.exports = () => {
       new WebpackPwaManifest({
     name: 'JATE text Editor',
     short_name: 'JATE',
-    start_url: './',
+    display: "standalone",
+    start_url: './', 
+    publicPath: './', 
     description: 'text editor',
     background_color: '#ffffff',
     theme_color: '#ffffff',
     fingerprints: false,
-    publicPath: './', 
     inject: true,
    
     icons: [
@@ -55,7 +59,7 @@ module.exports = () => {
       },
     ]
   })
-    ],
+  ],
 
     // Added babel for converting javascript to work with any browser
     // Bundle images files
@@ -63,7 +67,7 @@ module.exports = () => {
     module: {
       rules: [
         {
-          test: /\.(png|svg|jpg|jpeg|gif)$/i,
+          test: /\.(png|svg|jpg|jpeg|gif|ico)$/i,
           type: "asset/resource",
         },
         {
