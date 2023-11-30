@@ -46,7 +46,7 @@ export const getDb = async () => {
   const jadeDb = await openDB("jate", 1);
   const tx = jadeDb.transaction("jate", "readonly");
   const store = tx.objectStore("jate");
-  const request = store.get({id:1})
+  const request = store.get(1)
     const result = await request;
   console.log("result.value", result);
   return result;
